@@ -1,0 +1,33 @@
+@media print {
+  body, html {
+    background: #fff !important;
+    color: #232323 !important;
+  }
+  .events-root {
+    background: #fff !important;
+    min-height: unset !important;
+  }
+  .receipt-container {
+    box-shadow: none !important;
+    border: none !important;
+    background: #fff !important;
+    color: #232323 !important;
+    margin: 0 !important;
+    padding: 0 0 0 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .print-btn, .events-navbar, .footer, .events-hero, .events-hero-content, .events-date, .events-logo, .events-nav-link, .events-nav-btn {
+    display: none !important;
+  }
+  .receipt-table th, .receipt-table td {
+    color: #232323 !important;
+    background: #fff !important;
+    border: 1px solid #eee !important;
+    padding: 8px !important;
+  }
+  .receipt-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+} 

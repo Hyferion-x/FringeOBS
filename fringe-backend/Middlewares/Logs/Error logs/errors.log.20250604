@@ -1,0 +1,2 @@
+::1 - - [03/Jun/2025:15:04:49 +0000] "GET /api/cart HTTP/1.1" 400 27 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+::1 - - [03/Jun/2025:15:04:49 +0000] "GET /api/cart HTTP/1.1" 400 27 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"

@@ -1,0 +1,61 @@
+{
+    "keepSettings": {
+        "type": 2,
+        "amount": 10
+    },
+    "auditFilename": "audit.json",
+    "hashType": "md5",
+    "extension": "",
+    "files": [
+        {
+            "date": 1748789162080,
+            "name": "middlewares/Logs/Error logs/errors.log.20250602",
+            "hash": "c2e2e342f93ad628c9defd4a7b0ab18d"
+        },
+        {
+            "date": 1748789162083,
+            "name": "middlewares/Logs/Success logs/success.log.20250602",
+            "hash": "90ba35854ea008d602f414b24f11feb7"
+        },
+        {
+            "date": 1748963074228,
+            "name": "middlewares/Logs/Error logs/errors.log.20250604",
+            "hash": "db10188402c03aac2509732bf87b7cd4"
+        },
+        {
+            "date": 1748963074232,
+            "name": "middlewares/Logs/Success logs/success.log.20250604",
+            "hash": "ee90ecd2d08579e2ff9179dff33d094d"
+        },
+        {
+            "date": 1749085232899,
+            "name": "middlewares/Logs/Error logs/errors.log.20250605",
+            "hash": "4b722985bf65075c691c8411ae9e15b4"
+        },
+        {
+            "date": 1749085232903,
+            "name": "middlewares/Logs/Success logs/success.log.20250605",
+            "hash": "7d389a5f4f4a4ef3ba59b122ee316592"
+        },
+        {
+            "date": 1749869766529,
+            "name": "middlewares/Logs/Error logs/errors.log.20250614",
+            "hash": "aa1007653cf9157fba7d20e6e8014bfb"
+        },
+        {
+            "date": 1749869766533,
+            "name": "middlewares/Logs/Success logs/success.log.20250614",
+            "hash": "0527239975b9fdd441c315656f478f1c"
+        },
+        {
+            "date": 1749875157185,
+            "name": "C:\\Users\\Zesky\\Desktop\\Uni\\Year 2\\Sem 2\\DevOps and Enterprise Systems Project\\Fringe\\fringe-backend\\Middlewares\\Logs\\Error logs\\errors.log.20250614",
+            "hash": "ebc2d8519a6f75efa8259aff3d0bc5bd"
+        },
+        {
+            "date": 1749875157188,
+            "name": "C:\\Users\\Zesky\\Desktop\\Uni\\Year 2\\Sem 2\\DevOps and Enterprise Systems Project\\Fringe\\fringe-backend\\Middlewares\\Logs\\Success logs\\success.log.20250614",
+            "hash": "11cfbf3ada5fd0a36c1de573482eae96"
+        }
+    ]
+}

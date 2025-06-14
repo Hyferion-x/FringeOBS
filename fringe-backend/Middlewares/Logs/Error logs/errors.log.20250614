@@ -1,0 +1,2 @@
+::1 - - [14/Jun/2025:04:37:34 +0000] "POST /api/auth/login HTTP/1.1" 400 39 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+::1 - - [14/Jun/2025:04:48:45 +0000] "POST /api/payments/verify-and-create-orders HTTP/1.1" 500 246 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"

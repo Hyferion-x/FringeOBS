@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm start --prefix fringe-backend\" \"npm start --prefix fringe-client\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "react-calendar": "^5.1.0",
+    "recharts": "^2.15.3"
+  }
+}
