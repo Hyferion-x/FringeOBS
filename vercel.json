@@ -1,14 +1,10 @@
 {
   "version": 2,
   "name": "fringe-booking-system",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/fringe-backend/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/fringe-client/build/$1"
+      "source": "/api/(.*)",
+      "destination": "/fringe-backend/server.js"
     }
   ],
   "env": {
