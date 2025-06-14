@@ -149,10 +149,15 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// **Start server**
-app.listen(port, () => {
-  console.log(`🚀 Server is running on port: ${port}`);
-  console.log(`🌐 API Base URL: http://localhost:${port}/api`);
-  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🎯 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-});
+// **Start server for local development**
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`🚀 Server is running on port: ${port}`);
+    console.log(`🌐 API Base URL: http://localhost:${port}/api`);
+    console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🎯 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  });
+}
+
+// Export the app for serverless deployment
+module.exports = app;

@@ -1,19 +1,8 @@
 {
   "version": 2,
   "name": "fringe-booking-system",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/fringe-backend/server.js"
-    }
-  ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "fringe-backend/server.js": {
-      "maxDuration": 30
-    }
   },
   "headers": [
     {
