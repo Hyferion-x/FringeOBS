@@ -3,7 +3,7 @@ import './signup.css';
 import posterImg from './resources/adelaide-fringe-poster.jpg';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

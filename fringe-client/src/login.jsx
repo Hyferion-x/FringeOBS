@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './login.css';
-import { FaUserShield } from 'react-icons/fa';
 import posterImg from './resources/adelaide-fringe-poster.jpg';
 import { useNavigate } from 'react-router-dom';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

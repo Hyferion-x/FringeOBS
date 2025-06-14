@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './login.css'; // Reuse styles for consistency
 import { useNavigate } from 'react-router-dom';
-import { QRCodeCanvas } from 'qrcode.react';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const TABS = [
   { key: 'info', label: 'Profile Info' },
   { key: 'edit', label: 'Edit Profile' },

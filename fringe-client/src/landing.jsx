@@ -8,7 +8,7 @@ import event1 from './resources/event1.jpg';
 import newsletterImage from './resources/Newsletter image.png';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const weekdays = ['Any', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const Landing = () => {

@@ -5,7 +5,7 @@ import event1 from './resources/event1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
