@@ -24,7 +24,7 @@
       ]
     }
   ],
-  "buildCommand": "cd fringe-client && npm run vercel-build",
+  "buildCommand": "cd fringe-client && CI=false npm run vercel-build",
   "outputDirectory": "fringe-client/build",
   "installCommand": "npm install && cd fringe-client && npm install --legacy-peer-deps && cd ../fringe-backend && npm install"
 } 
