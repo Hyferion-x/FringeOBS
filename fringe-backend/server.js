@@ -18,7 +18,7 @@ const app = express();
 // Enhanced CORS configuration for production and development
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://fringe-obs.vercel.app',
+  'https://fringe-obs-git-main-zeskys-projects.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
