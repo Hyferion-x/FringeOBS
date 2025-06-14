@@ -6,7 +6,7 @@
 
 ## 🎭 Overview
 
-The **Adelaide Fringe Project** is a modern, full-stack web application designed and led by Udantha Weliwatta as the Lead Frontend Developer. to provide a seamless experience for event discovery, ticket purchasing, merchandise shopping, and event management. Built with a robust React frontend and a scalable Node.js/Express backend, the platform empowers users and administrators to interact with the vibrant world of Adelaide Fringe events.
+The **Adelaide Fringe Project** is a modern, full-stack web application designed and led by Udantha Weliwatta as the Lead Developer. to provide a seamless experience for event discovery, ticket purchasing, merchandise shopping, and event management. Built with a robust React frontend and a scalable Node.js/Express backend, the platform empowers users and administrators to interact with the vibrant world of Adelaide Fringe events.
 
 ---
 
