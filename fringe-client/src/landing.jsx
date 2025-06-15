@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from './ThemeContext';
 import './landing.css';
 
 // Import images
@@ -13,6 +14,7 @@ const weekdays = ['Any', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -128,6 +130,14 @@ const Landing = () => {
             <button className="events-nav-link" onClick={() => navigate('/events')}>Events</button>
             <button className="events-nav-link" onClick={() => navigate('/myorders')}>My Orders</button>
             <button className="events-nav-link" onClick={() => navigate('/contact')}>Contact</button>
+            <button 
+              className="theme-toggle" 
+              onClick={toggleTheme}
+              aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+              title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+            >
+              <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+            </button>
             <button className="login-btn" onClick={() => navigate('/cart')} style={{ position: 'relative', background: '#fff', color: '#ed4690', border: '1.5px solid #ed4690', borderRadius: '50%', width: 44, height: 44, padding: 0, fontSize: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: 8 }}>
               <i className="fas fa-shopping-cart"></i>
               {cartCount > 0 && (
@@ -145,9 +155,45 @@ const Landing = () => {
                   <i className="fas fa-user-circle"></i>
                 </button>
                 {showProfileMenu && (
-                  <div style={{ position: 'absolute', right: 0, top: 50, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 2px 12px rgba(85,34,204,0.08)', minWidth: 140, zIndex: 100 }}>
-                    <button style={{ width: '100%', padding: '10px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }} onClick={() => { setShowProfileMenu(false); navigate('/profile'); }}>My Profile</button>
-                    <button style={{ width: '100%', padding: '10px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', color: '#ed4690' }} onClick={() => { localStorage.removeItem('token'); setShowProfileMenu(false); navigate('/login'); }}>Logout</button>
+                  <div style={{ 
+                    position: 'absolute', 
+                    right: 0, 
+                    top: 50, 
+                    background: isDarkMode ? '#333' : '#fff', 
+                    border: `1px solid ${isDarkMode ? '#444' : '#eee'}`, 
+                    borderRadius: 8, 
+                    boxShadow: '0 2px 12px rgba(85,34,204,0.08)', 
+                    minWidth: 140, 
+                    zIndex: 100 
+                  }}>
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        padding: '10px 16px', 
+                        background: 'none', 
+                        border: 'none', 
+                        textAlign: 'left', 
+                        cursor: 'pointer',
+                        color: isDarkMode ? '#fff' : '#333'
+                      }} 
+                      onClick={() => { setShowProfileMenu(false); navigate('/profile'); }}
+                    >
+                      My Profile
+                    </button>
+                    <button 
+                      style={{ 
+                        width: '100%', 
+                        padding: '10px 16px', 
+                        background: 'none', 
+                        border: 'none', 
+                        textAlign: 'left', 
+                        cursor: 'pointer', 
+                        color: '#ed4690' 
+                      }} 
+                      onClick={() => { localStorage.removeItem('token'); setShowProfileMenu(false); navigate('/login'); }}
+                    >
+                      Logout
+                    </button>
                   </div>
                 )}
               </div>

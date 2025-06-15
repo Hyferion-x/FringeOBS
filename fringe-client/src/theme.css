@@ -1,0 +1,453 @@
+/* Dark Mode Theme Variables */
+:root {
+  /* Light theme colors */
+  --bg-primary: #fff;
+  --bg-secondary: #f8f9fa;
+  --bg-card: #fff;
+  --text-primary: #171E27;
+  --text-secondary: #666;
+  --text-muted: #999;
+  --border-color: #eee;
+  --shadow-light: rgba(61, 55, 241, 0.10);
+  --shadow-medium: rgba(85, 34, 204, 0.08);
+  --overlay-light: rgba(255, 255, 255, 0.85);
+  --input-bg: #fff;
+  --navbar-text: #fff;
+}
+
+/* Dark theme colors */
+.dark-theme {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-card: #333;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #999999;
+  --border-color: #444;
+  --shadow-light: rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+  --overlay-light: rgba(26, 26, 26, 0.85);
+  --input-bg: #444;
+  --navbar-text: #fff;
+}
+
+/* Apply theme variables to existing elements */
+.dark-theme body {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.dark-theme .landing-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Event cards dark mode */
+.dark-theme .event-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .event-content h3 {
+  color: var(--text-primary);
+}
+
+.dark-theme .event-content p {
+  color: var(--text-secondary);
+}
+
+/* Search box dark mode */
+.dark-theme .search-box {
+  background: var(--overlay-light);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .search-item input,
+.dark-theme .search-item select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .search-item label {
+  color: #ed4690;
+}
+
+/* Newsletter section dark mode */
+.dark-theme .newsletter {
+  background: var(--bg-secondary);
+}
+
+.dark-theme .newsletter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .newsletter-content h2 {
+  color: var(--text-primary);
+}
+
+.dark-theme .newsletter-content p {
+  color: var(--text-secondary);
+}
+
+.dark-theme .newsletter-form input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Footer dark mode */
+.dark-theme .footer {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.dark-theme .footer-section h3 {
+  color: var(--text-primary);
+}
+
+.dark-theme .footer-section p {
+  color: var(--text-secondary);
+}
+
+.dark-theme .footer-section a {
+  color: var(--text-secondary);
+}
+
+.dark-theme .footer-acknowledgement p {
+  color: var(--text-secondary);
+}
+
+/* Section headers dark mode */
+.dark-theme .section-header h2 {
+  color: var(--text-primary);
+}
+
+.dark-theme .events-section {
+  background: var(--bg-primary);
+}
+
+/* Form elements dark mode */
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.dark-theme input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  position: relative;
+  background: transparent;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.dark-theme .theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+/* Ensure overlay gradient still works */
+.dark-theme .hero-section .overlay {
+  background: linear-gradient(90deg, rgba(237,70,144,0.65) 0%, rgba(85,34,204,0.65) 100%);
+}
+
+/* Modal and dropdown dark mode */
+.dark-theme [style*="background: #fff"],
+.dark-theme [style*="background:#fff"] {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Navigation links dark mode */
+.dark-theme .events-nav-link {
+  color: #fff !important;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  padding: 8px 0;
+}
+
+.dark-theme .events-nav-link:hover {
+  opacity: 0.8;
+}
+
+/* Additional form styling for better dark mode support */
+.dark-theme .custom-select,
+.dark-theme .time-select {
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.dark-theme .dropdown-icon {
+  color: var(--text-secondary) !important;
+}
+
+/* Loading and error states */
+.dark-theme .loading {
+  color: #ed4690 !important;
+}
+
+.dark-theme .error {
+  color: #ff6b6b !important;
+}
+
+/* Login page dark mode */
+.dark-theme .login-page-root {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-theme .login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .login-card-left {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.dark-theme .login-header-group h2 {
+  color: var(--text-primary);
+}
+
+.dark-theme .login-subtext {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-input-group input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .login-float-label {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-float-label.active {
+  color: #ed4690;
+}
+
+.dark-theme .login-keep-logged {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-forgot {
+  color: #ed4690;
+}
+
+.dark-theme .login-divider {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-divider:before,
+.dark-theme .login-divider:after {
+  border-top: 1px solid var(--border-color);
+}
+
+.dark-theme .login-create-account {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-error {
+  color: #ff6b6b;
+}
+
+/* Signup page dark mode */
+.dark-theme .signup-page-root {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-theme .signup-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .signup-card-left {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.dark-theme .signup-header-group h2 {
+  color: var(--text-primary);
+}
+
+.dark-theme .signup-subtext {
+  color: var(--text-secondary);
+}
+
+.dark-theme .signup-input-group input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .signup-float-label {
+  color: var(--text-secondary);
+}
+
+.dark-theme .signup-float-label.active {
+  color: #ed4690;
+}
+
+/* Events page dark mode */
+.dark-theme .events-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-theme .events-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-theme .events-title {
+  color: var(--text-primary);
+}
+
+.dark-theme .events-filters {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .filter-group input,
+.dark-theme .filter-group select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Profile page dark mode */
+.dark-theme .profile-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-theme .profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.dark-theme .profile-header {
+  color: var(--text-primary);
+}
+
+.dark-theme .profile-info {
+  color: var(--text-secondary);
+}
+
+/* Utility classes for consistent theming */
+.theme-text-primary {
+  color: var(--text-primary) !important;
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.theme-bg-primary {
+  background: var(--bg-primary) !important;
+}
+
+.theme-bg-card {
+  background: var(--bg-card) !important;
+}
+
+.theme-border {
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Ensure all text is readable in dark mode */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme h6 {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme p,
+.dark-theme span,
+.dark-theme div,
+.dark-theme label {
+  color: var(--text-primary);
+}
+
+.dark-theme a {
+  color: #ed4690;
+}
+
+.dark-theme a:hover {
+  color: #c01362;
+}
+
+/* Admin and other complex pages */
+.dark-theme .admin-container,
+.dark-theme .admin-dashboard {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .admin-card,
+.dark-theme .dashboard-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme table {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme th,
+.dark-theme td {
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .modal,
+.dark-theme .popup {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+} 

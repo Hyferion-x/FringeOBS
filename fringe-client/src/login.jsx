@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from './ThemeContext';
 import './login.css';
 import posterImg from './resources/adelaide-fringe-poster.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 // Updated for Vercel deployment - using centralized API configuration
 import { API_ENDPOINTS } from './config/api';
 const Login = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailFocused, setEmailFocused] = useState(false);
@@ -32,11 +34,19 @@ const Login = () => {
             <span className="login-logo">ADELAIDE FRINGE</span>
             <span className="login-date">21 FEB - 23 MAR</span>
           </div>
-          <div className="login-navbar-right" style={{ display: 'flex', gap: '48px' }}>
+          <div className="login-navbar-right" style={{ display: 'flex', gap: '48px', alignItems: 'center' }}>
             <button onClick={() => navigate('/')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Home</button>
             <button onClick={() => navigate('/shop')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Shop</button>
             <button onClick={() => navigate('/events')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Events</button>
             <button onClick={() => navigate('/contact')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Contact</button>
+            <button 
+              className="theme-toggle" 
+              onClick={toggleTheme}
+              aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+              title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+            >
+              <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+            </button>
           </div>
         </div>
         <div className="login-hero-text">
@@ -123,9 +133,16 @@ const Login = () => {
                 </button>
                 {showFbPopup && (
                   <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-                    <div style={{ background: '#fff', padding: '32px 48px', borderRadius: '12px', boxShadow: '0 2px 16px rgba(0,0,0,0.2)', textAlign: 'center' }}>
-                      <h2 style={{ marginBottom: '16px' }}>Coming soon</h2>
-                      <p style={{ marginBottom: '24px' }}>Facebook login will be available soon.</p>
+                    <div style={{ 
+                      background: isDarkMode ? '#333' : '#fff', 
+                      padding: '32px 48px', 
+                      borderRadius: '12px', 
+                      boxShadow: '0 2px 16px rgba(0,0,0,0.2)', 
+                      textAlign: 'center',
+                      border: isDarkMode ? '1px solid #444' : 'none'
+                    }}>
+                      <h2 style={{ marginBottom: '16px', color: isDarkMode ? '#fff' : '#333' }}>Coming soon</h2>
+                      <p style={{ marginBottom: '24px', color: isDarkMode ? '#ccc' : '#666' }}>Facebook login will be available soon.</p>
                       <button onClick={() => setShowFbPopup(false)} style={{ padding: '8px 24px', borderRadius: '6px', border: 'none', background: '#367AFF', color: '#fff', fontWeight: 600, cursor: 'pointer' }}>Close</button>
                     </div>
                   </div>
