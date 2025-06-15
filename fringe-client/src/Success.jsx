@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 import './receipt.css'; // (Create this file for print styles)
 
 const Success = () => {
-  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [apiStatus, setApiStatus] = useState('');
@@ -69,7 +68,6 @@ const Success = () => {
           arr.findIndex(x => x.orderId === item.orderId && x.name === item.name && x.type === item.type) === idx
         );
         setAllItems(uniqueReceipts);
-        setBookings(data.tickets || []);
         setOrderInfo({
           orderId: sessionId,
           date: new Date().toLocaleString(),

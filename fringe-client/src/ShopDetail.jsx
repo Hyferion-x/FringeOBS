@@ -4,7 +4,7 @@ import './events.css';
 import heroBg from './resources/hero-bg.jpg';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const ShopDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 import './landing.css';
 
 const heroBg = 'https://wp.indaily.com.au/wp-content/uploads/2021/07/Light-Cycles-Botanic-Garden-Illuminate-Adelaide-2021-TLC07692.jpg';

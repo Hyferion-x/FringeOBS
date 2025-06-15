@@ -4,7 +4,7 @@ import './events.css';
 import heroBg from './resources/hero-bg.jpg';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Shop = () => {
   const navigate = useNavigate();
   const [merchandise, setMerchandise] = useState([]);
@@ -35,8 +35,6 @@ const Shop = () => {
     fetchMerchandise();
   }, []);
 
-  // Get all unique variants
-  const allVariants = Array.from(new Set(merchandise.flatMap(item => item.sizes || [])));
   // Remove dynamic minPrice and maxPrice, set minPrice = 0 and maxPrice = 200
   const minPrice = 0;
   const maxPrice = 200;

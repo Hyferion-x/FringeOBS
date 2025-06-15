@@ -2,12 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import './events.css';
-import heroBg from './resources/hero-bg.jpg';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Tickets = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,8 +15,6 @@ const Tickets = () => {
   const [cartCount, setCartCount] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [transferModal, setTransferModal] = useState({ open: false, ticket: null });
-  const [transferEmail, setTransferEmail] = useState('');
-  const [transferLoading, setTransferLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState('');
   const [actionMessage, setActionMessage] = useState('');
   const [debugInfo, setDebugInfo] = useState('');
@@ -645,7 +642,7 @@ const Tickets = () => {
     if (hasUpdates) {
       setTickets(updatedTickets);
     }
-  }, []);
+  }, [extractIdFromObjectId]);
   
   // Call fetchEventNames whenever tickets are loaded
   useEffect(() => {
@@ -683,64 +680,7 @@ const Tickets = () => {
     }, 500);
   };
 
-  // Transfer ticket handler
-  const handleTransfer = async () => {
-    if (!transferEmail || !transferModal.ticket) return;
-    setTransferLoading(true);
-    setActionMessage('');
-    
-    try {
-      // Otherwise, use the API
-      const token = localStorage.getItem('token');
-      const res = await fetch(`API_ENDPOINTS.ORDERS.TICKETS/${transferModal.ticket._id || transferModal.ticket.id}/transfer`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ recipientEmail: transferEmail })
-      });
-      
-      const data = await res.json();
-      if (res.ok) {
-        setActionMessage('Ticket transferred successfully!');
-        // Remove ticket from UI (or update status)
-        setTickets(tickets => tickets.filter(t => (t._id || t.id) !== (transferModal.ticket._id || transferModal.ticket.id)));
-        setTimeout(() => setTransferModal({ open: false, ticket: null }), 1200);
-      } else {
-        setActionMessage(data.message || 'Transfer failed.');
-      }
-    } catch (err) {
-      setActionMessage('Network error.');
-    }
-    setTransferLoading(false);
-  };
 
-  // Cancel ticket handler
-  const handleCancel = async (ticket) => {
-    setCancelLoading(ticket._id || ticket.id);
-    setActionMessage('');
-    try {
-      // Otherwise, use the API
-      const token = localStorage.getItem('token');
-      const res = await fetch(`API_ENDPOINTS.ORDERS.TICKETS/${ticket._id || ticket.id}/cancel`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setActionMessage('Ticket cancelled.');
-        setTickets(tickets => tickets.filter(t => (t._id || t.id) !== (ticket._id || ticket.id)));
-      } else {
-        setActionMessage(data.message || 'Cancel failed.');
-      }
-    } catch (err) {
-      setActionMessage('Network error.');
-    }
-    setCancelLoading('');
-  };
 
   // Add handleDelete function
   const handleDelete = async (ticket) => {

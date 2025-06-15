@@ -4,7 +4,7 @@ import './events.css';
 import event1 from './resources/event1.jpg';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const ticketTypes = [
   { key: 'standard', label: 'Standard' },
   { key: 'vip', label: 'VIP' },

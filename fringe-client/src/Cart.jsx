@@ -4,19 +4,7 @@ import './events.css';
 import event1 from './resources/event1.jpg';
 import heroBg from './resources/hero-bg.jpg';
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
-
-// --- Checkout Modal Steps ---
-const Stepper = ({ step }) => (
-  <div style={{ display: 'flex', justifyContent: 'center', gap: 18, marginBottom: 32 }}>
-    {[1, 2, 3, 4].map((s, i) => (
-      <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <div style={{ width: 32, height: 32, borderRadius: '50%', background: step === i ? '#ed4690' : '#f7f7fa', color: step === i ? '#fff' : '#ed4690', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 17, border: step === i ? '2.5px solid #ed4690' : '2px solid #eee', transition: 'all 0.2s' }}>{s}</div>
-        {i < 3 && <div style={{ width: 32, height: 2, background: step > i ? '#ed4690' : '#eee', borderRadius: 2 }} />}
-      </div>
-    ))}
-  </div>
-);
+import { API_ENDPOINTS } from './config/api';
 
 const OrderSummaryStep = ({ cart, total, onPay, onClose }) => (
   <div style={{ maxWidth: 480, margin: '0 auto' }}>
@@ -45,22 +33,18 @@ const OrderSummaryStep = ({ cart, total, onPay, onClose }) => (
 );
 
 const CheckoutModal = ({ open, onClose, cart, total, user, clearCart }) => {
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handlePay = async () => {
-    setLoading(true);
     setError('');
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         setError('Authentication required. Please login before checkout.');
-        setLoading(false);
         return;
       }
       if (!cart || !Array.isArray(cart) || cart.length === 0) {
         setError('Your cart is empty.');
-        setLoading(false);
         return;
       }
       // Unified checkout endpoint (no body needed)
@@ -83,7 +67,6 @@ const CheckoutModal = ({ open, onClose, cart, total, user, clearCart }) => {
     } catch (err) {
       setError(err.message || 'Payment initiation failed. Please try again.');
     }
-    setLoading(false);
   };
 
   const handleClose = () => {

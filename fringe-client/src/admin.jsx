@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './admin.css';
-import { FaUserFriends, FaCalendarAlt, FaEnvelope, FaUsers, FaUserTie, FaCog, FaSignOutAlt, FaChartLine, FaBoxOpen, FaTicketAlt, FaBell, FaSearch, FaReceipt, FaTachometerAlt, FaDollarSign, FaTshirt, FaSyncAlt } from 'react-icons/fa';
+import { FaUserFriends, FaCalendarAlt, FaEnvelope, FaUsers, FaCog, FaSignOutAlt, FaChartLine, FaBoxOpen, FaTicketAlt, FaBell, FaSearch, FaReceipt, FaDollarSign, FaTshirt, FaSyncAlt } from 'react-icons/fa';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { useNavigate } from 'react-router-dom';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall, API_BASE_URL } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 
 const sidebarItems = [
   { key: 'dashboard', label: 'Dashboard', icon: <FaChartLine /> },
@@ -28,13 +27,6 @@ const eventTypes = [
   'Dance',
   'Other'
 ];
-const eventStatuses = [
-  'All',
-  'Active',
-  'Processing',
-  'Closed'
-];
-
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
@@ -51,31 +43,16 @@ const Admin = () => {
   const [eventError, setEventError] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [filterVenue, setFilterVenue] = useState('');
-  const [filterDate, setFilterDate] = useState('');
-  const [ticketFilterDate, setTicketFilterDate] = useState('');
-  const [ticketFilterEvent, setTicketFilterEvent] = useState('');
-  const [ticketFilterVenue, setTicketFilterVenue] = useState('');
-  const [ticketFilterUser, setTicketFilterUser] = useState('');
-  const [ticketFilterStatus, setTicketFilterStatus] = useState('');
-  const [showTicketModal, setShowTicketModal] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const [cancelTargetTicket, setCancelTargetTicket] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [filterStartDate, setFilterStartDate] = useState('');
-  const [filterEndDate, setFilterEndDate] = useState('');
   const navigate = useNavigate();
   const [showSettings, setShowSettings] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [showNotifModal, setShowNotifModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customerModalOpen, setCustomerModalOpen] = useState(false);
-  const [customerTickets, setCustomerTickets] = useState([]);
-  const [customerModalLoading, setCustomerModalLoading] = useState(false);
   // Merchandise state
   const [merchandise, setMerchandise] = useState([]);
   const [showMerchModal, setShowMerchModal] = useState(false);
@@ -83,9 +60,6 @@ const Admin = () => {
   const [merchForm, setMerchForm] = useState({ name: '', type: '', price: '', description: '', images: '', sizes: '' });
   const [merchModalLoading, setMerchModalLoading] = useState(false);
   const [merchModalError, setMerchModalError] = useState('');
-  const [customerShopOrders, setCustomerShopOrders] = useState([]);
-  const [filterMerchStatus, setFilterMerchStatus] = useState('');
-  const [filterMerchItem, setFilterMerchItem] = useState('');
   const [allShopOrders, setAllShopOrders] = useState([]);
   const [merchFilterName, setMerchFilterName] = useState('');
   const [merchFilterType, setMerchFilterType] = useState('');
@@ -136,36 +110,7 @@ const Admin = () => {
   const [showMerchReceipt, setShowMerchReceipt] = useState(false);
   const [merchReceiptData, setMerchReceiptData] = useState(null);
 
-  // For each tab, use searchQuery to filter the main data
-  // Dashboard: filter events, users, bookings, orders, merchandise
-  const dashboardFilteredEvents = events.filter(event => {
-    if (!searchQuery) return true;
-    return (
-      event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (event.category && event.category.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  });
-  const dashboardFilteredUsers = users.filter(u => {
-    if (!searchQuery) return true;
-    return (
-      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  });
-  const dashboardFilteredOrders = orders.filter(order => {
-    if (!searchQuery) return true;
-    const booking = bookings.find(b => b._id === (order.bookingId?._id || order.bookingId));
-    const event = events.find(e => e._id === (booking?.eventId?._id || booking?.eventId));
-    return (
-      (order._id && order._id.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (event && event.name && event.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  });
-  const dashboardFilteredMerch = merchandise.filter(m => {
-    if (!searchQuery) return true;
-    return m.name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+
   // Events Tab: filter events
   const filteredEvents = events.filter(event => {
     let match = true;
@@ -655,52 +600,7 @@ const Admin = () => {
     setEventLoading(false);
   };
 
-  // Modal handlers
-  function openTicketDetails(row) {
-    setSelectedTicket(row);
-    setShowTicketModal(true);
-  }
 
-  // Update refund/cancel button to open confirmation modal
-  function openCancelConfirm(ticket) {
-    setCancelTargetTicket(ticket);
-    setShowCancelConfirm(true);
-  }
-
-  // Update handleCancelTicket to not call window.confirm
-  async function handleCancelTicket(row) {
-    setShowCancelConfirm(false);
-    if (!row) return;
-    const token = localStorage.getItem('token');
-    try {
-      const res = await fetch(API_ENDPOINTS.ORDERS.TICKETS_BY_ID(row.ticketOrderId), {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) {
-        alert('Failed to cancel ticket.');
-        return;
-      }
-      await fetchDashboardData();
-      setShowTicketModal(false);
-    } catch (err) {
-      alert('Network error.');
-    }
-  }
-
-  // Export CSV handler
-  function handleExportTicketsCSV() {
-    const headers = ['Ticket ID','Event','Venue','Date','Type','Qty','User','Status','Payment','Transaction ID'];
-    const rows = filteredTicketTableData.map(row => [row.ticketOrderId,row.eventName,row.venue,row.eventDateStr,row.ticketType,row.quantity,row.userName,row.status,row.paymentStatus,row.transactionId]);
-    let csv = headers.join(',') + '\n' + rows.map(r => r.map(x => '"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tickets.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
 
   // Logout handler
   const handleLogout = () => {
@@ -972,8 +872,6 @@ const Admin = () => {
     }
     return sum + price * (booking.quantity || 0);
   }, 0);
-  // Only count orders with status 'pending' or 'paid' for merchandise stats
-  const countedShopOrders = allShopOrders.filter(order => ['pending', 'paid'].includes((order.status || '').toLowerCase()));
   // Total Merchandise Sales (quantity)
   const totalMerchandiseSales = allShopOrders.reduce(
     (sum, order) => sum + (order.items ? order.items.reduce((s, i) => s + (i.quantity || 0), 0) : 0),
@@ -2395,12 +2293,5 @@ const Admin = () => {
     </div>
   );
 };
-
-// Helper to get event status
-function getEventStatus(event, now, label = false) {
-  if (new Date(event.date) > now) return label ? 'Active' : 'active';
-  if (event.closed) return label ? 'Closed' : 'closed';
-  return label ? 'Processing' : 'processing';
-}
 
 export default Admin;

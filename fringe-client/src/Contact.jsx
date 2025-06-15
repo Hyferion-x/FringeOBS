@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './events.css';
-import heroBg from './resources/hero-bg.jpg';
 
 // Updated for Vercel deployment - using centralized API configuration
-import { API_ENDPOINTS, apiCall } from './config/api';
+import { API_ENDPOINTS } from './config/api';
 const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [status, setStatus] = useState('');
   const [cartCount, setCartCount] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
   const isLoggedIn = Boolean(localStorage.getItem('token'));
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
     // Cart badge logic
@@ -42,7 +39,6 @@ const Contact = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    setLoading(true);
     try {
       const res = await fetch(`${API_ENDPOINTS.EVENTS.BASE}/contact-messages`, {
         method: 'POST',
@@ -58,7 +54,6 @@ const Contact = () => {
     } catch (err) {
       setError(err.message || 'Failed to send message');
     }
-    setLoading(false);
   };
 
   return (
