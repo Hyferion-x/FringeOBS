@@ -33,10 +33,10 @@ const Login = () => {
             <span className="login-date">21 FEB - 23 MAR</span>
           </div>
           <div className="login-navbar-right" style={{ display: 'flex', gap: '48px' }}>
-            <a href="/" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Home</a>
-            <a href="/shop" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Shop</a>
-            <a href="/events" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Events</a>
-            <a href="/contact" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Contact</a>
+            <button onClick={() => navigate('/')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Home</button>
+            <button onClick={() => navigate('/shop')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Shop</button>
+            <button onClick={() => navigate('/events')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Events</button>
+            <button onClick={() => navigate('/contact')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Contact</button>
           </div>
         </div>
         <div className="login-hero-text">
@@ -111,7 +111,7 @@ const Login = () => {
                   <label className="login-keep-logged">
                     <input type="checkbox" /> Keep me logged in
                   </label>
-                  <a href="/forgot-password" className="login-forgot">Forgot Password?</a>
+                  <button onClick={() => navigate('/forgot-password')} className="login-forgot" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 'inherit', fontFamily: 'inherit' }}>Forgot Password?</button>
                 </div>
                 <button type="submit" className="login-signin-btn">Sign in</button>
                 <div className="login-divider"><span>or</span></div>
@@ -130,7 +130,7 @@ const Login = () => {
                     </div>
                   </div>
                 )}
-                <div className="login-create-account">Need an account? <a href="/signup">Create one</a></div>
+                <div className="login-create-account">Need an account? <button onClick={() => navigate('/signup')} style={{ background: 'none', border: 'none', color: '#367AFF', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', fontFamily: 'inherit' }}>Create one</button></div>
                 {error && <div className="login-error" style={{ color: 'red', marginBottom: 10 }}>{error}</div>}
               </form>
             </div>
