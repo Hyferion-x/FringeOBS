@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './signup.css';
 import posterImg from './resources/adelaide-fringe-poster.jpg';
+import { useNavigate } from 'react-router-dom';
 
 // Updated for Vercel deployment - using centralized API configuration
 import { API_ENDPOINTS } from './config/api';
@@ -13,15 +14,16 @@ const Signup = () => {
   const [focus, setFocus] = useState({ name: false, email: false, password: false, confirmPassword: false });
   const [error, setError] = useState("");
   const [showFbPopup, setShowFbPopup] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
     if (token) {
       localStorage.setItem('token', token);
-      window.location.href = '/events';
+      navigate('/events');
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="login-page-root">
@@ -33,10 +35,10 @@ const Signup = () => {
             <span className="login-date">21 FEB - 23 MAR</span>
           </div>
           <div className="login-navbar-right" style={{ display: 'flex', gap: '48px' }}>
-            <a href="/" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Home</a>
-            <a href="/shop" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Shop</a>
-            <a href="/events" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Events</a>
-            <a href="/contact" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif' }}>Contact</a>
+            <button onClick={() => navigate('/')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Home</button>
+            <button onClick={() => navigate('/shop')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Shop</button>
+            <button onClick={() => navigate('/events')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Events</button>
+            <button onClick={() => navigate('/contact')} style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontFamily: 'DM Sans, sans-serif', background: 'none', border: 'none', cursor: 'pointer' }}>Contact</button>
           </div>
         </div>
         <div className="login-hero-text">
@@ -74,7 +76,7 @@ const Signup = () => {
                   const data = await response.json();
                   if (response.ok) {
                     // Signup successful, redirect to login
-                    window.location.href = "/login";
+                    navigate("/login");
                   } else {
                     setError(data.message || "Signup failed");
                   }
@@ -138,7 +140,7 @@ const Signup = () => {
                 {error && <div className="login-error" style={{ color: 'red', marginBottom: 10 }}>{error}</div>}
                 <button type="submit" className="login-signin-btn">Sign up</button>
                 <div className="login-divider"><span>or</span></div>
-                <button type="button" className="login-google-btn" onClick={() => window.location.href = "API_ENDPOINTS.AUTH.GOOGLE"}>
+                <button type="button" className="login-google-btn" onClick={() => window.location.href = API_ENDPOINTS.AUTH.GOOGLE}>
                   <span className="login-btn-icon"><i className="fab fa-google"></i></span> Continue with Google
                 </button>
                 <button type="button" className="login-facebook-btn" onClick={() => setShowFbPopup(true)}>
@@ -153,7 +155,7 @@ const Signup = () => {
                     </div>
                   </div>
                 )}
-                <div className="login-create-account">Already have an account? <a href="/login">Sign in</a></div>
+                <div className="login-create-account">Already have an account? <button onClick={() => navigate('/login')} style={{ background: 'none', border: 'none', color: '#367AFF', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', fontFamily: 'inherit' }}>Sign in</button></div>
               </form>
             </div>
           </div>
