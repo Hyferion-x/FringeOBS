@@ -115,7 +115,7 @@ const Login = () => {
                 </div>
                 <button type="submit" className="login-signin-btn">Sign in</button>
                 <div className="login-divider"><span>or</span></div>
-                <button type="button" className="login-google-btn" onClick={() => window.location.href = "API_ENDPOINTS.AUTH.GOOGLE"}>
+                <button type="button" className="login-google-btn" onClick={() => window.location.href = API_ENDPOINTS.AUTH.GOOGLE}>
                   <span className="login-btn-icon"><i className="fab fa-google"></i></span> Sign in with Google
                 </button>
                 <button type="button" className="login-facebook-btn" onClick={() => setShowFbPopup(true)}>

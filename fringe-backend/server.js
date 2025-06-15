@@ -133,6 +133,10 @@ if (mongoose.connection.readyState === 0) {
     .connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      bufferMaxEntries: 0, // Disable mongoose buffering
+      bufferCommands: false, // Disable mongoose buffering for serverless
     })
     .then(() => {
       console.log('✅ Connected to MongoDB');
@@ -140,6 +144,7 @@ if (mongoose.connection.readyState === 0) {
     })
     .catch(err => {
       console.error('❌ Database connection error:', err.message);
+      console.error('❌ MONGO_URL:', MONGO_URL ? 'Set' : 'Not set');
       if (require.main === module) {
         process.exit(1);
       }
@@ -156,7 +161,7 @@ app.get('/health', (req, res) => {
 });
 
 // **Routes**
-app.use('/', home);
+app.use('/api', home);  // Change base route to /api for Vercel compatibility
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/bookings', bookings);

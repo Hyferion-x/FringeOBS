@@ -24,6 +24,9 @@ module.exports = async (req, res) => {
     console.log('Original req.url:', req.url);
     console.log('Path from query:', urlPath);
     console.log('Request method:', req.method);
+    console.log('Environment variables check:');
+    console.log('- MONGO_URL:', process.env.MONGO_URL ? 'Set' : 'Not set');
+    console.log('- SECRET_KEY:', process.env.SECRET_KEY ? 'Set' : 'Not set');
     
     // Reconstruct the original URL for API routes
     if (urlPath && Array.isArray(urlPath)) {
@@ -47,6 +50,15 @@ module.exports = async (req, res) => {
     }
 
     console.log('Reconstructed req.url:', req.url);
+
+    // Ensure environment variables are available
+    if (!process.env.MONGO_URL) {
+      console.error('❌ MONGO_URL not found in environment variables');
+      return res.status(500).json({ 
+        message: 'Server configuration error',
+        error: 'Database connection not configured'
+      });
+    }
 
     // Let Express handle the request
     return app(req, res);
