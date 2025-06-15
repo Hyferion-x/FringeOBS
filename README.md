@@ -99,8 +99,8 @@ Fringe/
    npm start
    ```
 6. **Access the app:**
-   - Frontend: [http://20.42.209.232:3002](http://20.42.209.232:3002)
-   - Backend API: [http://20.42.209.232:5002/api](http://20.42.209.232:5002/api)
+   - Website: [fringe-obs.vercel.app](https://fringe-obs.vercel.app/)
+   
 
 ---
 
@@ -115,14 +115,54 @@ Fringe/
 ---
 
 ## 🚢 Deployment
-- **Docker:**
-  ```bash
-  docker build -t adelaide-fringe .
-  docker run -p 3002:3002 -p 5002:5002 adelaide-fringe
-  ```
-- **CI/CD:**
-  - Automated with GitLab CI/CD (`.gitlab-ci.yml`).
-  - Push to the main branch to trigger build and deployment pipelines.
+
+**Live Application:** [https://fringe-obs.vercel.app](https://fringe-obs.vercel.app)
+
+### Vercel Deployment
+The application is deployed on Vercel with a monolithic architecture combining both frontend and backend:
+
+- **Platform:** Vercel (Serverless)
+- **Frontend:** React app served from `/fringe-client/build`
+- **Backend:** Express.js API served via serverless functions at `/api/*`
+- **Database:** MongoDB Atlas
+
+### Environment Variables Required:
+```bash
+# Database
+MONGO_URL=mongodb+srv://...
+
+# Authentication
+SECRET_KEY=your_secret_key
+SESSION_SECRET=your_session_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=https://fringe-obs.vercel.app/api/auth/google/callback
+
+# Payment
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+
+# Frontend URLs
+FRONTEND_URL=https://fringe-obs.vercel.app
+REACT_APP_API_URL=https://fringe-obs.vercel.app/api
+REACT_APP_FRONTEND_URL=https://fringe-obs.vercel.app
+```
+
+### Deployment Steps:
+1. **Connect to Vercel:**
+   ```bash
+   npm install -g vercel
+   vercel login
+   vercel --prod
+   ```
+
+2. **MongoDB Atlas Setup:**
+   - Ensure MongoDB Atlas cluster allows access from anywhere (`0.0.0.0/0`)
+   - Update connection string in Vercel environment variables
+
+3. **Automatic Deployment:**
+   - Push to `main` branch triggers automatic deployment
+   - Vercel builds using `vercel.json` configuration
 
 ---
 
@@ -139,6 +179,8 @@ Fringe/
 ## 📫 Contact
 
 - **Lead Developer:** Udantha Weliwatta ([weli0007@flinders.edu.au](mailto:weli0007@flinders.edu.au))
+- **Alternative Contact:** [utgw98@gmail.com](mailto:utgw98@gmail.com)
+- **Company Website:** [hyferion.com](https://hyferion.com)
 - **Project Repository:** [GitLab/GitHub URL]
 
 ---
