@@ -14,7 +14,7 @@ const Tickets = () => {
   const [search, setSearch] = useState('');
   const [cartCount, setCartCount] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [transferModal, setTransferModal] = useState({ open: false, ticket: null });
+  const [transferModal] = useState({ open: false, ticket: null });
   const [cancelLoading, setCancelLoading] = useState('');
   const [actionMessage, setActionMessage] = useState('');
   const [debugInfo, setDebugInfo] = useState('');
@@ -27,7 +27,7 @@ const Tickets = () => {
   const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   // Helper function to extract ID from ObjectId string format
-  const extractIdFromObjectId = (objectIdString) => {
+  const extractIdFromObjectId = React.useCallback((objectIdString) => {
     if (!objectIdString) return null;
     
     // Handle the case where it's already a clean ID
@@ -43,10 +43,10 @@ const Tickets = () => {
       console.error('Error extracting ID:', err);
       return objectIdString.toString();
     }
-  };
+  }, []);
 
   // Helper function to get a clean event name
-  const getCleanEventName = (ticket, eventMap, bookingDetailsMap) => {
+  const getCleanEventName = React.useCallback((ticket, eventMap, bookingDetailsMap) => {
     // Import default image - using resources/event1.jpg as fallback
     const defaultEventImage = require('./resources/event1.jpg');
     
@@ -225,7 +225,7 @@ const Tickets = () => {
     }
     
     return result;
-  };
+  }, [extractIdFromObjectId]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -462,7 +462,7 @@ const Tickets = () => {
     updateCartCount();
     window.addEventListener('storage', updateCartCount);
     return () => window.removeEventListener('storage', updateCartCount);
-  }, [navigate]);
+  }, [navigate, getCleanEventName, extractIdFromObjectId]);
 
   // Fetch shop orders from DB only, deduplicate by orderId
   useEffect(() => {

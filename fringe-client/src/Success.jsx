@@ -38,7 +38,6 @@ const Success = () => {
       .then(res => res.ok ? res.json() : null)
       .then(async data => {
         // Always show both event and shop receipts if present
-        let items = [];
         let ticketReceipts = [];
         let shopReceipts = [];
         if (data && data.tickets?.length > 0) {

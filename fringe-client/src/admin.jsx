@@ -113,15 +113,15 @@ const Admin = () => {
   const [filterMerchStatus, setFilterMerchStatus] = useState('');
   const [filterMerchItem, setFilterMerchItem] = useState('');
   // Add missing ticket filter state variables
-  const [ticketFilterDate, setTicketFilterDate] = useState('');
-  const [ticketFilterEvent, setTicketFilterEvent] = useState('');
-  const [ticketFilterVenue, setTicketFilterVenue] = useState('');
-  const [ticketFilterUser, setTicketFilterUser] = useState('');
-  const [ticketFilterStatus, setTicketFilterStatus] = useState('');
+  const [ticketFilterDate] = useState('');
+  const [ticketFilterEvent] = useState('');
+  const [ticketFilterVenue] = useState('');
+  const [ticketFilterUser] = useState('');
+  const [ticketFilterStatus] = useState('');
   // Add missing customer modal state variables
-  const [customerModalLoading, setCustomerModalLoading] = useState(false);
-  const [customerTickets, setCustomerTickets] = useState([]);
-  const [customerShopOrders, setCustomerShopOrders] = useState([]);
+  const [, setCustomerModalLoading] = useState(false);
+  const [, setCustomerTickets] = useState([]);
+  const [, setCustomerShopOrders] = useState([]);
 
 
   // Events Tab: filter events
@@ -477,16 +477,7 @@ const Admin = () => {
     };
   });
 
-  // Filtering logic
-  const filteredTicketTableData = ticketTableData.filter(row => {
-    if (ticketFilterDate && row.eventDateStr !== ticketFilterDate) return false;
-    if (ticketFilterEvent && row.eventName !== ticketFilterEvent) return false;
-    if (ticketFilterVenue && row.venue !== ticketFilterVenue) return false;
-    if (ticketFilterUser && row.userName !== ticketFilterUser) return false;
-    if (ticketFilterStatus && row.paymentStatus !== ticketFilterStatus && row.status !== ticketFilterStatus) return false;
-    if (searchQuery && !row.ticketOrderId.toLowerCase().includes(searchQuery.toLowerCase()) && !row.eventName.toLowerCase().includes(searchQuery.toLowerCase()) && !row.venue.toLowerCase().includes(searchQuery.toLowerCase()) && !row.userName.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    return true;
-  });
+
 
   // Handlers for Events CRUD
   const openAddEvent = () => {
@@ -1607,7 +1598,7 @@ const Admin = () => {
                             {receiptData.order.items.map((item, idx) => (
                               <tr key={idx}>
                                 <td style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                                  {item.imgUrl && <img src={item.imgUrl} alt={item.name} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover', background: '#f7f7fa', boxShadow: '0 1px 4px #ed469033' }} />}
+                                  {item.imgUrl && <img src={item.imgUrl} alt={item.name.replace(/image|photo|picture/gi, '')} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover', background: '#f7f7fa', boxShadow: '0 1px 4px #ed469033' }} />}
                                   <span style={{ fontWeight: 600 }}>{item.name}</span>
                                 </td>
                                 <td style={{ padding: 8 }}>{item.variant || '-'}</td>
