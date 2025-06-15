@@ -1,5 +1,6 @@
 // Serverless function handler for Express app
 const mongoose = require('mongoose');
+const path = require('path');
 
 // Cache the database connection
 let cachedDb = null;
@@ -46,13 +47,18 @@ module.exports = async (req, res) => {
     await connectToDatabase();
 
     // Get the path from the query parameter
-    const { path } = req.query;
+    const { path: urlPath } = req.query;
+    
+    // Debug logging
+    console.log('Original req.url:', req.url);
+    console.log('Path from query:', urlPath);
+    console.log('Full query:', req.query);
     
     // Reconstruct the original URL
-    if (path && Array.isArray(path)) {
-      req.url = '/api/' + path.join('/');
-    } else if (path) {
-      req.url = '/api/' + path;
+    if (urlPath && Array.isArray(urlPath)) {
+      req.url = '/api/' + urlPath.join('/');
+    } else if (urlPath) {
+      req.url = '/api/' + urlPath;
     } else {
       req.url = '/api/';
     }
@@ -69,13 +75,28 @@ module.exports = async (req, res) => {
       req.url += '?' + queryParams.toString();
     }
 
-    console.log('Serverless function called:', req.method, req.url);
+    console.log('Reconstructed req.url:', req.url);
+    console.log('Request method:', req.method);
 
-    // Import and use the Express app
-    const app = require('../fringe-backend/server.js');
+    // Change working directory to backend folder so relative imports work
+    const originalCwd = process.cwd();
+    const backendPath = path.join(originalCwd, 'fringe-backend');
+    process.chdir(backendPath);
     
-    // Let Express handle the request
-    return app(req, res);
+    try {
+      // Import and use the Express app
+      const app = require('../fringe-backend/server.js');
+      
+      // Restore original working directory
+      process.chdir(originalCwd);
+      
+      // Let Express handle the request
+      return app(req, res);
+    } catch (appError) {
+      // Restore original working directory even if there's an error
+      process.chdir(originalCwd);
+      throw appError;
+    }
   } catch (error) {
     console.error('Serverless function error:', error);
     res.status(500).json({ 

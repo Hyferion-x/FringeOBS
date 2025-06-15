@@ -6,9 +6,9 @@ const cors = require('cors');
 const morgan = require('morgan');
 const rt = require('file-stream-rotator');
 const session = require('express-session');
-const passport = require('./config/passport');
 const path = require('path');
 const fs = require('fs');
+const passport = require('./config/passport');
 
 // Force model registration
 require('./models/ContactMessage');
