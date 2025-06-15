@@ -18,7 +18,8 @@ const app = express();
 // Enhanced CORS configuration for production and development
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://fringe-obs-git-main-zeskys-projects.vercel.app',
+  'https://fringe-obs.vercel.app',
+  'https://fringe-obs-git-main-zeskys-projects.vercel.app', // Keep for compatibility
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -34,8 +35,13 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use(helmet());
 app.use(express.json({ limit: '10mb' }));
