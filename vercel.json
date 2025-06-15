@@ -34,7 +34,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/[...path]"
+      "destination": "/api/[...path]?path=$1"
     }
   ],
   "buildCommand": "cd fringe-client && REACT_APP_API_URL=https://fringe-obs.vercel.app/api npm run vercel-build",

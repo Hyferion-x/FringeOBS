@@ -2,7 +2,12 @@
 const path = require('path');
 
 // Import the Express app directly
-const app = require('../fringe-backend/server.js');
+let app;
+try {
+  app = require('../fringe-backend/server.js');
+} catch (error) {
+  console.error('Failed to import Express app:', error);
+}
 
 module.exports = async (req, res) => {
   try {
@@ -17,22 +22,35 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Get the path from the query parameter
+    // Get the path from the query parameter or extract from URL
     const { path: urlPath } = req.query;
+    
+    // If path is not in query, extract from the original URL
+    let extractedPath = urlPath;
+    if (!extractedPath) {
+      // Extract path from the original URL after /api/
+      const urlMatch = req.url.match(/^\/api\/(.*)$/);
+      if (urlMatch && urlMatch[1]) {
+        extractedPath = urlMatch[1].split('/');
+      }
+    }
     
     // Debug logging
     console.log('Original req.url:', req.url);
     console.log('Path from query:', urlPath);
+    console.log('Extracted path:', extractedPath);
     console.log('Request method:', req.method);
     console.log('Environment variables check:');
     console.log('- MONGO_URL:', process.env.MONGO_URL ? 'Set' : 'Not set');
     console.log('- SECRET_KEY:', process.env.SECRET_KEY ? 'Set' : 'Not set');
     
     // Reconstruct the original URL for API routes
-    if (urlPath && Array.isArray(urlPath)) {
-      req.url = '/api/' + urlPath.join('/');
-    } else if (urlPath) {
-      req.url = '/api/' + urlPath;
+    if (extractedPath && Array.isArray(extractedPath)) {
+      req.url = '/api/' + extractedPath.join('/');
+    } else if (extractedPath && typeof extractedPath === 'string') {
+      req.url = '/api/' + extractedPath;
+    } else if (extractedPath) {
+      req.url = '/api/' + extractedPath;
     } else {
       req.url = '/api/';
     }
@@ -61,6 +79,14 @@ module.exports = async (req, res) => {
     }
 
     // Let Express handle the request
+    if (!app) {
+      console.error('Express app not available');
+      return res.status(500).json({ 
+        message: 'Server not initialized',
+        error: 'Express app failed to load'
+      });
+    }
+    
     return app(req, res);
   } catch (error) {
     console.error('Serverless function error:', error);
