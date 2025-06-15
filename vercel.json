@@ -1,6 +1,21 @@
 {
   "version": 2,
   "name": "fringe-booking-system",
+  "functions": {
+    "api/[...path].js": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/[...path]"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/fringe-client/build/$1"
+    }
+  ],
   "env": {
     "NODE_ENV": "production",
     "REACT_APP_API_URL": "https://fringe-obs.vercel.app/api",
