@@ -109,6 +109,19 @@ const Admin = () => {
   // Add state for Merchandise Orders receipt modal
   const [showMerchReceipt, setShowMerchReceipt] = useState(false);
   const [merchReceiptData, setMerchReceiptData] = useState(null);
+  // Add missing filter state variables
+  const [filterMerchStatus, setFilterMerchStatus] = useState('');
+  const [filterMerchItem, setFilterMerchItem] = useState('');
+  // Add missing ticket filter state variables
+  const [ticketFilterDate, setTicketFilterDate] = useState('');
+  const [ticketFilterEvent, setTicketFilterEvent] = useState('');
+  const [ticketFilterVenue, setTicketFilterVenue] = useState('');
+  const [ticketFilterUser, setTicketFilterUser] = useState('');
+  const [ticketFilterStatus, setTicketFilterStatus] = useState('');
+  // Add missing customer modal state variables
+  const [customerModalLoading, setCustomerModalLoading] = useState(false);
+  const [customerTickets, setCustomerTickets] = useState([]);
+  const [customerShopOrders, setCustomerShopOrders] = useState([]);
 
 
   // Events Tab: filter events
