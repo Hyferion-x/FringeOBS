@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 module.exports = async (req, res) => {
   try {
     // Set CORS headers
@@ -10,11 +12,29 @@ module.exports = async (req, res) => {
       return;
     }
 
+    // Test database connection
+    let dbStatus = 'disconnected';
+    let dbError = null;
+    
+    try {
+      if (process.env.MONGO_URL) {
+        console.log('Testing database connection...');
+        await mongoose.connect(process.env.MONGO_URL, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        dbStatus = 'connected';
+        console.log('Database connection successful');
+      }
+    } catch (error) {
+      dbError = error.message;
+      console.error('Database connection failed:', error);
+    }
+
     const debug = {
       timestamp: new Date().toISOString(),
       method: req.method,
       url: req.url,
-      headers: req.headers,
       query: req.query,
       environment: {
         NODE_ENV: process.env.NODE_ENV,
@@ -22,14 +42,20 @@ module.exports = async (req, res) => {
         SECRET_KEY: process.env.SECRET_KEY ? 'SET' : 'NOT SET',
         SESSION_SECRET: process.env.SESSION_SECRET ? 'SET' : 'NOT SET',
       },
-      mongoose: {
-        readyState: require('mongoose').connection.readyState,
+      database: {
+        status: dbStatus,
+        readyState: mongoose.connection.readyState,
+        error: dbError,
         states: {
           0: 'disconnected',
           1: 'connected', 
           2: 'connecting',
           3: 'disconnecting'
         }
+      },
+      serverless: {
+        working: true,
+        timestamp: new Date().toISOString()
       }
     };
 

@@ -1,4 +1,34 @@
 // Serverless function handler for Express app
+const mongoose = require('mongoose');
+
+// Cache the database connection
+let cachedDb = null;
+
+async function connectToDatabase() {
+  if (cachedDb && mongoose.connection.readyState === 1) {
+    return cachedDb;
+  }
+
+  const MONGO_URL = process.env.MONGO_URL;
+  if (!MONGO_URL) {
+    throw new Error('MONGO_URL environment variable is required');
+  }
+
+  try {
+    console.log('Connecting to MongoDB...');
+    const connection = await mongoose.connect(MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    cachedDb = connection;
+    console.log('✅ Connected to MongoDB in serverless function');
+    return connection;
+  } catch (error) {
+    console.error('❌ Database connection error:', error);
+    throw error;
+  }
+}
+
 module.exports = async (req, res) => {
   try {
     // Set CORS headers first
@@ -11,6 +41,9 @@ module.exports = async (req, res) => {
       res.status(200).end();
       return;
     }
+
+    // Connect to database first
+    await connectToDatabase();
 
     // Get the path from the query parameter
     const { path } = req.query;
