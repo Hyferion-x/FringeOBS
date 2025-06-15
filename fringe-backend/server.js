@@ -82,56 +82,69 @@ const port = process.env.PORT || 5002;
 const { MONGO_URL } = process.env;
 if (!MONGO_URL) {
   console.error('❌ MONGO_URL environment variable is required');
-  process.exit(1);
+  if (require.main === module) {
+    process.exit(1);
+  }
 }
 
-// Create logs directories if they don't exist
-const logsDir = path.join(__dirname, 'Middlewares', 'Logs');
-const errorLogsDir = path.join(logsDir, 'Error logs');
-const successLogsDir = path.join(logsDir, 'Success logs');
+// **Logging setup - only for local development**
+if (require.main === module) {
+  // Create logs directories if they don't exist
+  const logsDir = path.join(__dirname, 'Middlewares', 'Logs');
+  const errorLogsDir = path.join(logsDir, 'Error logs');
+  const successLogsDir = path.join(logsDir, 'Success logs');
 
-[logsDir, errorLogsDir, successLogsDir].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
+  [logsDir, errorLogsDir, successLogsDir].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
 
-// **Generating Logs Middleware and Rotating Logs Daily**
-const fileWriter = rt.getStream({ 
-  filename: path.join(errorLogsDir, 'errors.log'), 
-  frequency: 'daily', 
-  verbose: false 
-});
-const successWriter = rt.getStream({ 
-  filename: path.join(successLogsDir, 'success.log'), 
-  frequency: 'daily', 
-  verbose: false 
-});
+  // **Generating Logs Middleware and Rotating Logs Daily**
+  const fileWriter = rt.getStream({ 
+    filename: path.join(errorLogsDir, 'errors.log'), 
+    frequency: 'daily', 
+    verbose: false 
+  });
+  const successWriter = rt.getStream({ 
+    filename: path.join(successLogsDir, 'success.log'), 
+    frequency: 'daily', 
+    verbose: false 
+  });
 
-// **Separate success and error request logging**
-const skipSuccess = (req, res) => res.statusCode < 400;
-const skipError = (req, res) => res.statusCode >= 400;
+  // **Separate success and error request logging**
+  const skipSuccess = (req, res) => res.statusCode < 400;
+  const skipError = (req, res) => res.statusCode >= 400;
 
-// **Error logging**
-app.use(morgan('combined', { skip: skipSuccess, stream: fileWriter }));
+  // **Error logging**
+  app.use(morgan('combined', { skip: skipSuccess, stream: fileWriter }));
 
-// **Success logging**
-app.use(morgan('combined', { skip: skipError, stream: successWriter }));
+  // **Success logging**
+  app.use(morgan('combined', { skip: skipError, stream: successWriter }));
+} else {
+  // For serverless, use simple console logging
+  app.use(morgan('combined'));
+}
 
 // **Database Connection with better error handling**
-mongoose
-  .connect(MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    console.log(`📊 Database: ${MONGO_URL.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
-  })
-  .catch(err => {
-    console.error('❌ Database connection error:', err.message);
-    process.exit(1);
-  });
+// Only connect if not already connected (for serverless compatibility)
+if (mongoose.connection.readyState === 0) {
+  mongoose
+    .connect(MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => {
+      console.log('✅ Connected to MongoDB');
+      console.log(`📊 Database: ${MONGO_URL.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
+    })
+    .catch(err => {
+      console.error('❌ Database connection error:', err.message);
+      if (require.main === module) {
+        process.exit(1);
+      }
+    });
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
