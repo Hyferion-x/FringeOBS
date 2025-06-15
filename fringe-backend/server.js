@@ -47,17 +47,19 @@ app.use(helmet());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Session configuration with better security
+// Session configuration optimized for serverless
+// Note: MemoryStore is not ideal for production serverless, but it's simple and works for this use case
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fringe_secret_development_only',
   resave: false,
   saveUninitialized: false,
+  rolling: true, // Reset expiration on activity
   cookie: {
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    httpOnly: true
+    maxAge: 2 * 60 * 60 * 1000, // Reduced to 2 hours for serverless
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   },
-  // For serverless, we'll use the default MemoryStore but acknowledge the limitation
   name: 'fringeSessionId'
 }));
 
@@ -129,35 +131,118 @@ if (require.main === module) {
   app.use(morgan('combined'));
 }
 
-// **Database Connection with better error handling**
-// Only connect if not already connected (for serverless compatibility)
-if (mongoose.connection.readyState === 0) {
-  mongoose
-    .connect(MONGO_URL, {
+// **Serverless-Optimized Database Connection**
+// Cache the connection promise to reuse across function invocations
+let cachedConnection = null;
+
+async function connectToDatabase() {
+  // If we have a cached connection that's still valid, reuse it
+  if (cachedConnection && mongoose.connection.readyState === 1) {
+    console.log('🔄 Reusing existing MongoDB connection');
+    return cachedConnection;
+  }
+
+  // If connection is connecting or disconnecting, wait for it
+  if (mongoose.connection.readyState === 2 || mongoose.connection.readyState === 3) {
+    console.log('⏳ Waiting for MongoDB connection...');
+    await new Promise((resolve) => {
+      const checkConnection = () => {
+        if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 0) {
+          resolve();
+        } else {
+          setTimeout(checkConnection, 100);
+        }
+      };
+      checkConnection();
+    });
+  }
+
+  // Only create new connection if not connected
+  if (mongoose.connection.readyState === 0) {
+    console.log('🔌 Creating new MongoDB connection...');
+    
+    // Serverless-optimized connection options
+    const connectionOptions = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
-      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-    })
-    .then(() => {
+      serverSelectionTimeoutMS: 15000, // Increased for cold starts
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 15000,
+      maxPoolSize: 5, // Limit pool size for serverless
+      minPoolSize: 1,
+      maxIdleTimeMS: 30000,
+      heartbeatFrequencyMS: 10000,
+      // Important for serverless: prevent connection from hanging
+      bufferCommands: false,
+      bufferMaxEntries: 0
+    };
+
+    try {
+      cachedConnection = await mongoose.connect(MONGO_URL, connectionOptions);
       console.log('✅ Connected to MongoDB');
       console.log(`📊 Database: ${MONGO_URL.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
-    })
-    .catch(err => {
+      console.log(`🔗 Connection state: ${mongoose.connection.readyState}`);
+      
+      // Handle connection events for better monitoring
+      mongoose.connection.on('error', (err) => {
+        console.error('❌ MongoDB connection error:', err);
+      });
+      
+      mongoose.connection.on('disconnected', () => {
+        console.log('📱 MongoDB disconnected');
+        cachedConnection = null;
+      });
+      
+      return cachedConnection;
+    } catch (err) {
       console.error('❌ Database connection error:', err.message);
       console.error('❌ MONGO_URL:', MONGO_URL ? 'Set' : 'Not set');
+      
+      // Reset cached connection on error
+      cachedConnection = null;
+      
       if (require.main === module) {
         process.exit(1);
       }
-    });
+      throw err;
+    }
+  }
+
+  return cachedConnection;
 }
+
+// **Middleware to ensure database connection before handling requests**
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    console.error('❌ Database connection middleware error:', error);
+    res.status(500).json({ 
+      message: 'Database connection failed',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
+  }
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
+  const connectionState = mongoose.connection.readyState;
+  const stateMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+  
   res.status(200).json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    database: {
+      state: stateMap[connectionState],
+      readyState: connectionState
+    }
   });
 });
 
@@ -192,11 +277,17 @@ app.use((req, res) => {
 
 // **Start server for local development**
 if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`🚀 Server is running on port: ${port}`);
-    console.log(`🌐 API Base URL: http://localhost:${port}/api`);
-    console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🎯 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  // For local development, initialize connection immediately
+  connectToDatabase().then(() => {
+    app.listen(port, () => {
+      console.log(`🚀 Server is running on port: ${port}`);
+      console.log(`🌐 API Base URL: http://localhost:${port}/api`);
+      console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🎯 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+    });
+  }).catch((err) => {
+    console.error('❌ Failed to start server:', err);
+    process.exit(1);
   });
 }
 
