@@ -54,8 +54,11 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    httpOnly: true
+  },
+  // For serverless, we'll use the default MemoryStore but acknowledge the limitation
+  name: 'fringeSessionId'
 }));
 
 app.use(passport.initialize());
@@ -135,8 +138,6 @@ if (mongoose.connection.readyState === 0) {
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-      bufferMaxEntries: 0, // Disable mongoose buffering
-      bufferCommands: false, // Disable mongoose buffering for serverless
     })
     .then(() => {
       console.log('✅ Connected to MongoDB');
