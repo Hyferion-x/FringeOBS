@@ -112,12 +112,7 @@ const Admin = () => {
   // Add missing filter state variables
   const [filterMerchStatus, setFilterMerchStatus] = useState('');
   const [filterMerchItem, setFilterMerchItem] = useState('');
-  // Add missing ticket filter state variables
-  const [ticketFilterDate] = useState('');
-  const [ticketFilterEvent] = useState('');
-  const [ticketFilterVenue] = useState('');
-  const [ticketFilterUser] = useState('');
-  const [ticketFilterStatus] = useState('');
+
   // Add missing customer modal state variables
   const [, setCustomerModalLoading] = useState(false);
   const [, setCustomerTickets] = useState([]);
@@ -455,27 +450,7 @@ const Admin = () => {
     actualSales: eventSalesMap[event._id]?.actual || 0,
   }));
 
-  // Join TicketOrder, Booking, Event, User for table rows
-  const ticketTableData = orders.map(order => {
-    const booking = bookings.find(b => b._id === (order.bookingId?._id || order.bookingId));
-    const event = events.find(e => e._id === (booking?.eventId?._id || booking?.eventId));
-    const user = users.find(u => u._id === (order.userId?._id || order.userId));
-    return {
-      ticketOrderId: order._id,
-      eventName: event?.name || 'Unknown',
-      venue: event?.venue || 'Unknown',
-      eventDateStr: event?.date ? new Date(event.date).toLocaleDateString() + ' ' + new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
-      ticketType: booking?.ticketType || '-',
-      quantity: booking?.quantity || '-',
-      userName: user?.name || 'Unknown',
-      status: booking?.status || '-',
-      paymentStatus: order.paymentStatus,
-      transactionId: order.transactionId,
-      bookingId: booking?._id,
-      userId: user?._id,
-      eventId: event?._id,
-    };
-  });
+
 
 
 
@@ -1598,7 +1573,7 @@ const Admin = () => {
                             {receiptData.order.items.map((item, idx) => (
                               <tr key={idx}>
                                 <td style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                                  {item.imgUrl && <img src={item.imgUrl} alt={item.name.replace(/image|photo|picture/gi, '')} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover', background: '#f7f7fa', boxShadow: '0 1px 4px #ed469033' }} />}
+                                  {item.imgUrl && <img src={item.imgUrl} alt={item.name} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover', background: '#f7f7fa', boxShadow: '0 1px 4px #ed469033' }} />}
                                   <span style={{ fontWeight: 600 }}>{item.name}</span>
                                 </td>
                                 <td style={{ padding: 8 }}>{item.variant || '-'}</td>
