@@ -177,10 +177,6 @@ async function connectToDatabase() {
     try {
       cachedConnection = await mongoose.connect(MONGO_URL, connectionOptions);
       
-      // Set Mongoose-specific options for serverless
-      mongoose.set('bufferCommands', false);
-      mongoose.set('bufferMaxEntries', 0);
-      
       console.log('✅ Connected to MongoDB');
       console.log(`📊 Database: ${MONGO_URL.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
       console.log(`🔗 Connection state: ${mongoose.connection.readyState}`);
