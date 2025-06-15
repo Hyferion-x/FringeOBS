@@ -8,16 +8,6 @@
     "extension": "",
     "files": [
         {
-            "date": 1748789162080,
-            "name": "middlewares/Logs/Error logs/errors.log.20250602",
-            "hash": "c2e2e342f93ad628c9defd4a7b0ab18d"
-        },
-        {
-            "date": 1748789162083,
-            "name": "middlewares/Logs/Success logs/success.log.20250602",
-            "hash": "90ba35854ea008d602f414b24f11feb7"
-        },
-        {
             "date": 1748963074228,
             "name": "middlewares/Logs/Error logs/errors.log.20250604",
             "hash": "db10188402c03aac2509732bf87b7cd4"
@@ -56,6 +46,16 @@
             "date": 1749875157188,
             "name": "C:\\Users\\Zesky\\Desktop\\Uni\\Year 2\\Sem 2\\DevOps and Enterprise Systems Project\\Fringe\\fringe-backend\\Middlewares\\Logs\\Success logs\\success.log.20250614",
             "hash": "11cfbf3ada5fd0a36c1de573482eae96"
+        },
+        {
+            "date": 1749952210433,
+            "name": "C:\\Users\\Zesky\\Desktop\\Uni\\Year 2\\Sem 2\\DevOps and Enterprise Systems Project\\FringeOBS\\fringe-backend\\Middlewares\\Logs\\Error logs\\errors.log.20250615",
+            "hash": "af4f990617330667fad0b243e458b962"
+        },
+        {
+            "date": 1749952210436,
+            "name": "C:\\Users\\Zesky\\Desktop\\Uni\\Year 2\\Sem 2\\DevOps and Enterprise Systems Project\\FringeOBS\\fringe-backend\\Middlewares\\Logs\\Success logs\\success.log.20250615",
+            "hash": "456c3d70297493afbc286d4c737c4d1b"
         }
     ]
 }
