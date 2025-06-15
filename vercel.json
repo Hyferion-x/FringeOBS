@@ -10,10 +10,7 @@
     "NODE_ENV": "production",
     "REACT_APP_API_URL": "https://fringe-obs.vercel.app/api",
     "REACT_APP_FRONTEND_URL": "https://fringe-obs.vercel.app",
-    "FRONTEND_URL": "https://fringe-obs.vercel.app",
-    "SECRET_KEY": "@secret_key",
-    "MONGO_URL": "@mongo_url",
-    "SESSION_SECRET": "@session_secret"
+    "FRONTEND_URL": "https://fringe-obs.vercel.app"
   },
   "headers": [
     {
