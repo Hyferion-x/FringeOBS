@@ -8,10 +8,10 @@ const rt = require('file-stream-rotator');
 const session = require('express-session');
 const path = require('path');
 const fs = require('fs');
-const passport = require('./config/passport');
+const passport = require(path.join(__dirname, 'config', 'passport'));
 
 // Force model registration
-require('./models/ContactMessage');
+require(path.join(__dirname, 'models', 'ContactMessage'));
 
 const app = express();
 
@@ -62,18 +62,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // **Import routes**
-const home = require('./routes/home');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
-const bookings = require('./routes/bookings');
-const ticketOrders = require('./routes/ticketOrders');
-const events = require('./routes/events');
-const paymentsRouter = require('./routes/payments');
-const notifications = require('./routes/notifications');
-const shopOrders = require('./routes/shopOrders');
-const merchandise = require('./routes/merchandise');
-const cartRoutes = require('./routes/cart');
-const contactMessages = require('./routes/contactMessages');
+const home = require(path.join(__dirname, 'routes', 'home'));
+const users = require(path.join(__dirname, 'routes', 'users'));
+const auth = require(path.join(__dirname, 'routes', 'auth'));
+const bookings = require(path.join(__dirname, 'routes', 'bookings'));
+const ticketOrders = require(path.join(__dirname, 'routes', 'ticketOrders'));
+const events = require(path.join(__dirname, 'routes', 'events'));
+const paymentsRouter = require(path.join(__dirname, 'routes', 'payments'));
+const notifications = require(path.join(__dirname, 'routes', 'notifications'));
+const shopOrders = require(path.join(__dirname, 'routes', 'shopOrders'));
+const merchandise = require(path.join(__dirname, 'routes', 'merchandise'));
+const cartRoutes = require(path.join(__dirname, 'routes', 'cart'));
+const contactMessages = require(path.join(__dirname, 'routes', 'contactMessages'));
 
 // Port configuration - Updated to match frontend expectation
 const port = process.env.PORT || 5002;

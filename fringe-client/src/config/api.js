@@ -4,7 +4,10 @@
 // Get the API base URL from environment variables
 // In production (Vercel), this will be your deployed API URL
 // In development, it will be your local backend URL
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 
+  (process.env.NODE_ENV === 'production' 
+    ? 'https://fringe-obs.vercel.app/api' 
+    : 'http://localhost:5002/api');
 
 // Frontend URL (for redirects and callbacks)
 export const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL || 'http://localhost:3000';
