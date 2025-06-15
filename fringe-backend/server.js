@@ -171,14 +171,16 @@ async function connectToDatabase() {
       maxPoolSize: 5, // Limit pool size for serverless
       minPoolSize: 1,
       maxIdleTimeMS: 30000,
-      heartbeatFrequencyMS: 10000,
-      // Important for serverless: prevent connection from hanging
-      bufferCommands: false,
-      bufferMaxEntries: 0
+      heartbeatFrequencyMS: 10000
     };
 
     try {
       cachedConnection = await mongoose.connect(MONGO_URL, connectionOptions);
+      
+      // Set Mongoose-specific options for serverless
+      mongoose.set('bufferCommands', false);
+      mongoose.set('bufferMaxEntries', 0);
+      
       console.log('✅ Connected to MongoDB');
       console.log(`📊 Database: ${MONGO_URL.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
       console.log(`🔗 Connection state: ${mongoose.connection.readyState}`);
