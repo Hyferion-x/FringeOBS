@@ -1,40 +1,16 @@
 // Serverless function handler for Express app
-const mongoose = require('mongoose');
-
-// Cache the database connection
-let cachedDb = null;
-
-async function connectToDatabase() {
-  if (cachedDb) {
-    return cachedDb;
-  }
-
-  const MONGO_URL = process.env.MONGO_URL;
-  if (!MONGO_URL) {
-    throw new Error('MONGO_URL environment variable is required');
-  }
-
-  try {
-    const connection = await mongoose.connect(MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    cachedDb = connection;
-    console.log('✅ Connected to MongoDB in serverless function');
-    return connection;
-  } catch (error) {
-    console.error('❌ Database connection error:', error);
-    throw error;
-  }
-}
-
 module.exports = async (req, res) => {
   try {
-    // Ensure database connection
-    await connectToDatabase();
-
-    // Import the Express app after database connection
-    const app = require('../fringe-backend/server.js');
+    // Set CORS headers first
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
+    }
 
     // Get the path from the query parameter
     const { path } = req.query;
@@ -59,17 +35,11 @@ module.exports = async (req, res) => {
     if (queryParams.toString()) {
       req.url += '?' + queryParams.toString();
     }
-    
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    
-    // Handle preflight requests
-    if (req.method === 'OPTIONS') {
-      res.status(200).end();
-      return;
-    }
+
+    console.log('Serverless function called:', req.method, req.url);
+
+    // Import and use the Express app
+    const app = require('../fringe-backend/server.js');
     
     // Let Express handle the request
     return app(req, res);
@@ -77,7 +47,8 @@ module.exports = async (req, res) => {
     console.error('Serverless function error:', error);
     res.status(500).json({ 
       message: 'Internal server error',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Server error'
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 }; 
