@@ -1385,7 +1385,7 @@ const Admin = () => {
                         {eventForm.imgUrl ? (
                           <img src={eventForm.imgUrl} alt="Preview" style={{ maxWidth: 180, maxHeight: 120, borderRadius: 8, border: '1.5px solid #eee', objectFit: 'cover' }} onError={e => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/180x120?text=No+Image'; }} />
                         ) : (
-                          <img src="https://via.placeholder.com/180x120?text=No+Image" alt="No Image" style={{ maxWidth: 180, maxHeight: 120, borderRadius: 8, border: '1.5px solid #eee', objectFit: 'cover' }} />
+                          <img src="https://via.placeholder.com/180x120?text=No+Image" alt="Placeholder" style={{ maxWidth: 180, maxHeight: 120, borderRadius: 8, border: '1.5px solid #eee', objectFit: 'cover' }} />
                         )}
                       </div>
                       <div className="modal-actions">
